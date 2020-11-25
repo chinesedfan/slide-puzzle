@@ -52,8 +52,8 @@ function moveSlot(puzzle, steps, r, c) {
     const [sr, sc] = getPosition(puzzle, 'X')
     if (sr < r || sc < c) throw new Error('invalid slot target')
 
-    const s1 = Array(sr - r).fill('R')
-    const s2 = Array(sc - c).fill('D')
+    const s1 = Array(sr - r).fill('U')
+    const s2 = Array(sc - c).fill('L')
     applySteps(puzzle, steps, s1.concat(s2))
 }
 
