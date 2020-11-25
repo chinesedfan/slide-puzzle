@@ -1,0 +1,19 @@
+{
+  "name": "slide-puzzle-solver",
+  "version": "1.0.0",
+  "description": "Solver for slide puzzle",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "slide",
+    "puzzle",
+    "solver"
+  ],
+  "author": "Xianming Zhong",
+  "license": "MIT"
+}
