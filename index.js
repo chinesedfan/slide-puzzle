@@ -41,11 +41,50 @@ function solve2x3(puzzle, steps) {
 }
 
 function moveTile(puzzle, steps, ch, r, c) {
-    const [tr, tc] = getPosition(puzzle, ch)
-    if (tc < c) {
-        // left
+    const n = puzzle.length
+    const doneFn = (xch, xr, xc) => xch === ch && xr === r && xc === c
+
+    let [tr, tc] = getPosition(puzzle, ch)
+    let stopFn
+    if (r === n - 1) {
+        if (tc < c) {
+            // last second of first col
+        } else {
+            // left bottom
+            if (tr < r - 1) {
+                applySteps(puzzle, steps, ['R'])
+
+                // now the empty slot must in row `r - 1`
+                stopFn = (xch, xr, xc) => xch === ch && xr === r
+                rotate(puzzle, steps, tr, c + 1, r, Math.max(tc, c + 2), stopFn)
+            }
+
+            tc = getPosition(puzzle, ch)[1]
+            rotate(puzzle, steps, r - 1, c, r, tc, doneFn)
+        }
+    } else if (c === n - 1) {
+        if (tr < r) {
+            // second of last col
+        } else {
+            // right top
+            if (tc < c - 1) {
+                applySteps(puzzle, steps, ['D'])
+
+                // now the empty slot must in col `c - 1`
+                stopFn = (xch, xr, xc) => xch === ch && xc === c
+                rotate(puzzle, steps, r + 1, tc, Math.max(tr, r + 2), c, stopFn)
+            }
+
+            tr = getPosition(puzzle, ch)[0]
+            rotate(puzzle, steps, r, c - 1, tr, c, doneFn)
+        }
     } else {
-        
+        if (tc < c) {
+            // middle of first row
+        } else {
+            // left top
+            rotate(puzzle, steps, r, c, Math.max(tr, r + 1), Math.max(tc, c + 1), stopFn)
+        }
     }
 }
 function moveSlot(puzzle, steps, r, c) {
@@ -59,7 +98,54 @@ function moveSlot(puzzle, steps, r, c) {
 
 // r1, c1 - left top corner
 // r2, c2 - right bottom corner
-function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise) {
+// stopFn(xch, xr, xc) - when to stop, with xch has moved to [xr, xc]
+function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
+    let [r, c] = getPosition(puzzle, 'X')
+    let stop = false
+    while (1) {
+        if (r === r1) {
+            while (c < c2) {
+                applySteps(puzzle, steps, ['R'])
+                if (stopFn(puzzle[r][c], r, c)) {
+                    stop = true
+                    break
+                }
+                c++
+            }
+        }
+        if (c === c2) {
+            while (r < r2) {
+                applySteps(puzzle, steps, ['D'])
+                if (stopFn(puzzle[r][c], r, c)) {
+                    stop = true
+                    break
+                }
+                r++
+            }
+        }
+        if (r === r2) {
+            while (c > c1) {
+                applySteps(puzzle, steps, ['L'])
+                if (stopFn(puzzle[r][c], r, c)) {
+                    stop = true
+                    break
+                }
+                c--
+            }
+        }
+        if (c === c1) {
+            while (r > r1) {
+                applySteps(puzzle, steps, ['U'])
+                if (stopFn(puzzle[r][c], r, c)) {
+                    stop = true
+                    break
+                }
+                r--
+            }
+        }
+
+        if (stop) break
+    }
 }
 
 function applySteps(puzzle, oldSteps, newSteps) {
