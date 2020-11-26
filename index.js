@@ -16,7 +16,7 @@ function solve(puzzle, steps = []) {
 function solveBar(puzzle, steps, r, c, isRow) {
     const n = puzzle.length;
     if (isRow) {
-        for (let i = c; c < n - 2; i++) {
+        for (let i = c; i < n - 2; i++) {
             moveSlot(puzzle, steps, r, i)
             moveTile(puzzle, steps, getExpectedValue(puzzle, r, i), r, i)
         }
@@ -26,7 +26,7 @@ function solveBar(puzzle, steps, r, c, isRow) {
         moveTile(puzzle, steps, getExpectedValue(puzzle, r, n - 1), r + 1, n - 1)
         // TODO: rotate
     } else {
-        for (let i = r; r < n - 2; i++) {
+        for (let i = r; i < n - 2; i++) {
             moveSlot(puzzle, steps, i, c)
             moveTile(puzzle, steps, getExpectedValue(puzzle, i, c), i, c)
         }
@@ -96,10 +96,9 @@ function moveTile(puzzle, steps, ch, r, c) {
 }
 function moveSlot(puzzle, steps, r, c) {
     const [sr, sc] = getPosition(puzzle, 'X')
-    if (sr < r || sc < c) throw new Error('invalid slot target')
 
-    const s1 = Array(sr - r).fill('U')
-    const s2 = Array(sc - c).fill('L')
+    const s1 = sr < r ? Array(r - sr).fill('D') : Array(sr - r).fill('U')
+    const s2 = sc < c ? Array(c - sc).fill('R') : Array(sc - c).fill('L')
     applySteps(puzzle, steps, s1.concat(s2))
 }
 
