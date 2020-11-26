@@ -60,7 +60,7 @@ function moveTile(puzzle, steps, ch, r, c) {
             }
 
             tc = getPosition(puzzle, ch)[1]
-            rotate(puzzle, steps, r - 1, c, r, tc, doneFn)
+            rotate(puzzle, steps, r - 1, c, r, Math.max(c + 1, tc), doneFn)
         }
     } else if (c === n - 1) {
         if (tr < r) {
@@ -76,14 +76,19 @@ function moveTile(puzzle, steps, ch, r, c) {
             }
 
             tr = getPosition(puzzle, ch)[0]
-            rotate(puzzle, steps, r, c - 1, tr, c, doneFn)
+            rotate(puzzle, steps, r, c - 1, Math.max(r + 1, tr), c, doneFn)
         }
     } else {
         if (tc < c) {
             // middle of first row
+            applySteps(puzzle, steps, ['D'])
+
+            stopFn = (xch, xr, xc) => xch === ch && xc === c + 1
+            rotate(puzzle, steps, r + 1, tc, Math.max(r + 2, tr), c + 1, stopFn)
+            rotate(puzzle, steps, r, c, tr, c + 1, doneFn)
         } else {
             // left top
-            rotate(puzzle, steps, r, c, Math.max(tr, r + 1), Math.max(tc, c + 1), stopFn)
+            rotate(puzzle, steps, r, c, Math.max(tr, r + 1), Math.max(tc, c + 1), doneFn)
         }
     }
 }
@@ -100,10 +105,12 @@ function moveSlot(puzzle, steps, r, c) {
 // r2, c2 - right bottom corner
 // stopFn(xch, xr, xc) - when to stop, with xch has moved to [xr, xc]
 function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
+    if (r1 >= r2 || c1 >= c2) throw new Error('invalid rotate')
+
     let [r, c] = getPosition(puzzle, 'X')
     let stop = false
     while (1) {
-        if (r === r1) {
+        if (!stop && r === r1) {
             while (c < c2) {
                 applySteps(puzzle, steps, ['R'])
                 if (stopFn(puzzle[r][c], r, c)) {
@@ -113,7 +120,7 @@ function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
                 c++
             }
         }
-        if (c === c2) {
+        if (!stop && c === c2) {
             while (r < r2) {
                 applySteps(puzzle, steps, ['D'])
                 if (stopFn(puzzle[r][c], r, c)) {
@@ -123,7 +130,7 @@ function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
                 r++
             }
         }
-        if (r === r2) {
+        if (!stop && r === r2) {
             while (c > c1) {
                 applySteps(puzzle, steps, ['L'])
                 if (stopFn(puzzle[r][c], r, c)) {
@@ -133,7 +140,7 @@ function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
                 c--
             }
         }
-        if (c === c1) {
+        if (!stop && c === c1) {
             while (r > r1) {
                 applySteps(puzzle, steps, ['U'])
                 if (stopFn(puzzle[r][c], r, c)) {

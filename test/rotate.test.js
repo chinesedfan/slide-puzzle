@@ -1,0 +1,23 @@
+const { rotate } = require('../index')
+
+function getStopFn(ch, r, c) {
+    return (xch, xr, xc) => xch === ch && xr === r && xc === c
+}
+
+let puzzle
+let stopFn
+describe('rotate', () => {
+    beforeEach(() => {
+        puzzle = [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 'X', 10, 11],
+            [12, 13, 14, 15],
+        ]
+    })
+    it('when the slot is in the first row', () => {
+        const [ch, r, c] = [10, 3, 2]
+        rotate(puzzle, [], 2, 1, 3, 3, getStopFn(ch, r, c))
+        expect(puzzle[r][c]).toBe(ch)
+    })
+})
