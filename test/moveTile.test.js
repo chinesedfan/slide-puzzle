@@ -134,7 +134,7 @@ describe('moveTile - second of last col', () => {
         testSingle(puzzle, puzzle[2][3], 1, 3)
     })
     it('from previous col', () => {
-        testSingle(puzzle, puzzle[3][3], 1, 3)
+        testSingle(puzzle, puzzle[3][2], 1, 3)
     })
     it('from other cols', () => {
         testSingle(puzzle, puzzle[3][0], 1, 3)

@@ -63,7 +63,9 @@ function moveTile(puzzle, steps, ch, r, c) {
             rotate(puzzle, steps, r - 1, c, r, Math.max(c + 1, tc), doneFn)
         }
     } else if (c === n - 1) {
-        if (tr < r) {
+        if (tr === r) {
+            rotate(puzzle, steps, r, tc, r + 1, c, doneFn)
+        } else if (tr < r) {
             // second of last col
         } else {
             // right top
