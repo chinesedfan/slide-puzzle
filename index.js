@@ -24,7 +24,9 @@ function solveBar(puzzle, steps, r, c, isRow) {
         moveTile(puzzle, steps, getExpectedValue(puzzle, r, n - 2), r, n - 1)
         moveSlot(puzzle, steps, r + 1, n - 1)
         moveTile(puzzle, steps, getExpectedValue(puzzle, r, n - 1), r + 1, n - 1)
-        // TODO: rotate
+
+        const stopFn = getStopFn(getExpectedValue(puzzle, r, n - 1), r, n - 1)
+        rotate(puzzle, steps, r, n - 2, getPosition(puzzle, 'X')[0], n - 1, stopFn)
     } else {
         for (let i = r; i < n - 2; i++) {
             moveSlot(puzzle, steps, i, c)
@@ -34,7 +36,9 @@ function solveBar(puzzle, steps, r, c, isRow) {
         moveTile(puzzle, steps, getExpectedValue(puzzle, n - 2, c), n - 1, c)
         moveSlot(puzzle, steps, n - 1, c + 1)
         moveTile(puzzle, steps, getExpectedValue(puzzle, n - 1, c), n - 1, c + 1)
-        // TODO: rotate
+
+        const stopFn = getStopFn(getExpectedValue(puzzle, n - 1, c), n - 1, c)
+        rotate(puzzle, steps, n - 2, c, n - 1, getPosition(puzzle, 'X')[1], stopFn)
     }
 }
 function solve2x3(puzzle, steps) {
@@ -197,7 +201,10 @@ function getPosition(puzzle, ch) {
 }
 function getExpectedValue(puzzle, r, c) {
     const n = puzzle.length;
-    return (r + 1) * n + c + 1
+    return r * n + c + 1
+}
+function getStopFn(ch, r, c) {
+    return (xch, xr, xc) => xch === ch && xr === r && xc === c
 }
 
 module.exports = {
@@ -215,4 +222,5 @@ module.exports = {
     getStr,
     getPosition,
     getExpectedValue,
+    getStopFn,
 }

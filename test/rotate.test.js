@@ -1,8 +1,4 @@
-const { rotate } = require('../index')
-
-function getStopFn(ch, r, c) {
-    return (xch, xr, xc) => xch === ch && xr === r && xc === c
-}
+const { rotate, getStopFn } = require('../index')
 
 let puzzle
 let stopFn
