@@ -53,11 +53,11 @@ function moveTile(puzzle, steps, ch, r, c) {
     if (r === n - 1) {
         if (tc < c) {
             // last second of first col
-            rotateUnit(puzzle, steps, 4, false)
+            rotateUnit(puzzle, steps, 2, false)
             rotateUnit(puzzle, steps, 3, true)
-            rotateUnit(puzzle, steps, 4, true)
+            rotateUnit(puzzle, steps, 2, true)
             rotateUnit(puzzle, steps, 3, false)
-            applySteps(puzzle, steps, ['R'])
+            applySteps(puzzle, steps, ['U'])
         } else {
             // left bottom
             if (tr < r - 1) {
@@ -179,24 +179,19 @@ function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
 }
 
 
-function rotateUnit(puzzle, steps, xpos = 4, clockwise = true) {
-    if (xpos === 3) {
-        if (clockwise) {
-            // 1 2    2 3
-            // x 3 -> x 1
-            applySteps(puzzle, steps, ['U', 'R', 'D', 'L'])
-        }
-    } else {
-        if (clockwise) {
-            // 1 2    2 3
-            // 3 x -> 1 x
-            applySteps(puzzle, steps, ['L', 'U', 'R', 'D'])
-        } else {
-            // 1 2    3 1
-            // 3 x -> 2 x
-            applySteps(puzzle, steps, ['U', 'L', 'D', 'R'])
-        }
+function rotateUnit(puzzle, steps, xpos, clockwise) {
+    const moves = 'RDLU'
+    const delta = clockwise ? 1 : -1
+    // 0 1
+    // 3 2
+    const start = xpos + (clockwise ? 0 : 1) + moves.length
+
+    const newSteps = []
+    for (let i = 0; i < moves.length; i++) {
+        newSteps[i] = moves[(start + i * delta) % moves.length]
     }
+    console.log(newSteps)
+    applySteps(puzzle, steps, newSteps)
 }
 
 function applySteps(puzzle, oldSteps, newSteps) {
