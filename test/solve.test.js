@@ -7,7 +7,7 @@ function validPuzzle(puzzle) {
             if (puzzle[i][j] !== getExpectedValue(puzzle, i, j)) return false
         }
     }
-    return puzzle[n - 1][n - 1] === 'X'
+    return true
 }
 
 let puzzle

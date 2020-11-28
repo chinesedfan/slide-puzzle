@@ -240,6 +240,7 @@ function getPosition(puzzle, ch) {
 }
 function getExpectedValue(puzzle, r, c) {
     const n = puzzle.length;
+    if (r === n - 1 && c === n - 1) return 'X'
     return r * n + c + 1
 }
 function getStopFn(ch, r, c) {
