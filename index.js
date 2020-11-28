@@ -17,10 +17,10 @@ function solveBar(puzzle, steps, r, c, isRow) {
     const n = puzzle.length;
     if (isRow) {
         for (let i = c; i < n - 2; i++) {
-            moveSlot(puzzle, steps, r, i)
+            moveSlot(puzzle, steps, r, i, true)
             moveTile(puzzle, steps, getExpectedValue(puzzle, r, i), r, i)
         }
-        moveSlot(puzzle, steps, r, n - 1)
+        moveSlot(puzzle, steps, r, n - 1, true)
         moveTile(puzzle, steps, getExpectedValue(puzzle, r, n - 2), r, n - 1)
         moveSlot(puzzle, steps, r + 1, n - 1)
         moveTile(puzzle, steps, getExpectedValue(puzzle, r, n - 1), r + 1, n - 1)
@@ -34,7 +34,7 @@ function solveBar(puzzle, steps, r, c, isRow) {
         }
         moveSlot(puzzle, steps, n - 1, c)
         moveTile(puzzle, steps, getExpectedValue(puzzle, n - 2, c), n - 1, c)
-        moveSlot(puzzle, steps, n - 1, c + 1)
+        moveSlot(puzzle, steps, n - 1, c + 1, true)
         moveTile(puzzle, steps, getExpectedValue(puzzle, n - 1, c), n - 1, c + 1)
 
         const stopFn = getStopFn(getExpectedValue(puzzle, n - 1, c), n - 1, c)
@@ -92,18 +92,31 @@ function moveTile(puzzle, steps, ch, r, c) {
             stopFn = (xch, xr, xc) => xch === ch && xc === c + 1
             rotate(puzzle, steps, r + 1, tc, Math.max(r + 2, tr), c + 1, stopFn)
             rotate(puzzle, steps, r, c, tr, c + 1, doneFn)
+        } else if (tr < r) {
+            // middle of first col
+            applySteps(puzzle, steps, ['R'])
+
+            stopFn = (xch, xr, xc) => xch === ch && xr === r + 1
+            rotate(puzzle, steps, tr, c + 1, r + 1, Math.max(tc, c + 2), stopFn)
+
+            tc = getPosition(puzzle, ch)[1]
+            rotate(puzzle, steps, r, c, r + 1, tc, doneFn)
         } else {
             // left top
             rotate(puzzle, steps, r, c, Math.max(tr, r + 1), Math.max(tc, c + 1), doneFn)
         }
     }
 }
-function moveSlot(puzzle, steps, r, c) {
+function moveSlot(puzzle, steps, r, c, rowFirst) {
     const [sr, sc] = getPosition(puzzle, 'X')
 
     const s1 = sr < r ? Array(r - sr).fill('D') : Array(sr - r).fill('U')
     const s2 = sc < c ? Array(c - sc).fill('R') : Array(sc - c).fill('L')
-    applySteps(puzzle, steps, s1.concat(s2))
+    if (rowFirst) {
+        applySteps(puzzle, steps, s2.concat(s1))
+    } else {
+        applySteps(puzzle, steps, s1.concat(s2))
+    }
 }
 
 // r1, c1 - left top corner
