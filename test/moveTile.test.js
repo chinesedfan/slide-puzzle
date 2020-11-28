@@ -159,7 +159,7 @@ describe('moveTile - second of last col', () => {
         testSingle(puzzle, puzzle[3][0], 1, 3)
     })
 })
-describe.skip('moveTile - second of last col', () => {
+describe('moveTile - second of last row', () => {
     beforeEach(() => {
         puzzle = [
             [12, 2, 3, 4],

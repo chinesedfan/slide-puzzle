@@ -53,6 +53,11 @@ function moveTile(puzzle, steps, ch, r, c) {
     if (r === n - 1) {
         if (tc < c) {
             // last second of first col
+            rotateUnit(puzzle, steps, 4, false)
+            rotateUnit(puzzle, steps, 3, true)
+            rotateUnit(puzzle, steps, 4, true)
+            rotateUnit(puzzle, steps, 3, false)
+            applySteps(puzzle, steps, ['R'])
         } else {
             // left bottom
             if (tr < r - 1) {
@@ -170,6 +175,27 @@ function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
         }
 
         if (stop) break
+    }
+}
+
+
+function rotateUnit(puzzle, steps, xpos = 4, clockwise = true) {
+    if (xpos === 3) {
+        if (clockwise) {
+            // 1 2    2 3
+            // x 3 -> x 1
+            applySteps(puzzle, steps, ['U', 'R', 'D', 'L'])
+        }
+    } else {
+        if (clockwise) {
+            // 1 2    2 3
+            // 3 x -> 1 x
+            applySteps(puzzle, steps, ['L', 'U', 'R', 'D'])
+        } else {
+            // 1 2    3 1
+            // 3 x -> 2 x
+            applySteps(puzzle, steps, ['U', 'L', 'D', 'R'])
+        }
     }
 }
 
