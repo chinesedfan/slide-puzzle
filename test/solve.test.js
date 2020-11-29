@@ -11,8 +11,21 @@ function validPuzzle(puzzle) {
 }
 
 let puzzle
-describe('solve - 5x5', () => {
-    it('simple', () => {
+describe('solve', () => {
+    afterEach(() => {
+        puzzle = solve(puzzle)
+        expect(validPuzzle(puzzle)).toBeTruthy()
+    })
+
+    it('4x4', () => {
+        puzzle = [
+            [2, 3, 4, 8],
+            [5, 6, 7, 'X'],
+            [9, 1, 10, 11],
+            [12, 13, 14, 15],
+        ]
+    })
+    it('5x5', () => {
         puzzle = [
             [2, 13, 'X', 5, 15],
             [16, 4, 3, 12, 9],
@@ -20,7 +33,5 @@ describe('solve - 5x5', () => {
             [1, 7, 17, 10, 24],
             [20, 22, 23, 21, 19],
         ]
-        solve(puzzle)
-        expect(validPuzzle(puzzle)).toBeTruthy()
     })
 })

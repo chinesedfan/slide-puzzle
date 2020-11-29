@@ -11,6 +11,8 @@ function solve(puzzle, steps = []) {
     }
 
     solve2x3(puzzle, steps)
+
+    return puzzle
 }
 function solveBar(puzzle, steps, r, c, isRow) {
     const n = puzzle.length;
@@ -48,6 +50,7 @@ function solve2x3(puzzle, steps) {
     const ch5 = getExpectedValue(puzzle, n - 1, n - 2)
     // 4 ? ?
     // ? x ?
+    moveSlot(puzzle, steps, n - 2, n - 3)
     moveTile(puzzle, steps, ch4, n - 2, n - 3)
     moveSlot(puzzle, steps, n - 1, n - 2, true)
 
