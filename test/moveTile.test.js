@@ -174,6 +174,9 @@ describe('moveTile - second of last row', () => {
     afterEach(() => {
         expect(getLockedValues()).toEqual(lockedValues)
     })
+    it('from same col', () => {
+        testSingle(puzzle, puzzle[1][1], 3, 1)
+    })
     it('from previous col', () => {
         testSingle(puzzle, puzzle[2][0], 3, 1)
     })

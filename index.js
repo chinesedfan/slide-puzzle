@@ -114,7 +114,9 @@ function moveTile(puzzle, steps, ch, r, c) {
     let [tr, tc] = getPosition(puzzle, ch)
     let stopCondition
     if (r === n - 1) {
-        if (tc < c) {
+        if (tc === c) {
+            rotate(puzzle, steps, tr, c, r, c + 1, doneCondition)
+        } else if (tc < c) {
             // second of last row
             rotateUnit(puzzle, steps, 2, false)
             rotateUnit(puzzle, steps, 3, true)
