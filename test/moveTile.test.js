@@ -181,3 +181,18 @@ describe('moveTile - second of last row', () => {
         testSingle(puzzle, puzzle[2][0], 3, 1)
     })
 })
+describe('moveTile - 3x3', () => {
+    it('from previous col', () => {
+        puzzle = [
+            [2, 3, 4],
+            [5, 6, 'X'],
+            [7, 1, 8],
+        ]
+        lockedPositions = [[0, 0], [0, 2]]
+        lockedValues = getLockedValues()
+
+        testSingle(puzzle, puzzle[2][1], 1, 2)
+
+        expect(getLockedValues()).toEqual(lockedValues)
+    })
+})

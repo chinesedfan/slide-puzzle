@@ -146,6 +146,9 @@ function moveTile(puzzle, steps, ch, r, c) {
             rotateUnit(puzzle, steps, 2, false)
             rotateUnit(puzzle, steps, 1, false)
             applySteps(puzzle, steps, ['L'])
+        } else if (r === n - 2) {
+            // second of last col
+            rotate(puzzle, steps, r, tc, tr, c, doneCondition)
         } else {
             // right top
             if (tc < c - 1) {
