@@ -27,8 +27,8 @@ function solveBar(puzzle, steps, r, c, isRow) {
         moveSlot(puzzle, steps, r + 1, n - 1)
         moveTile(puzzle, steps, getExpectedValue(puzzle, r, n - 1), r + 1, n - 1)
 
-        const stopFn = getStopFn(getExpectedValue(puzzle, r, n - 1), r, n - 1)
-        rotate(puzzle, steps, r, n - 2, getPosition(puzzle, 'X')[0], n - 1, stopFn)
+        const stopCondition = [getExpectedValue(puzzle, r, n - 1), r, n - 1]
+        rotate(puzzle, steps, r, n - 2, getPosition(puzzle, 'X')[0], n - 1, stopCondition)
     } else {
         for (let i = r; i < n - 2; i++) {
             moveSlot(puzzle, steps, i, c)
@@ -39,8 +39,8 @@ function solveBar(puzzle, steps, r, c, isRow) {
         moveSlot(puzzle, steps, n - 1, c + 1, true)
         moveTile(puzzle, steps, getExpectedValue(puzzle, n - 1, c), n - 1, c + 1)
 
-        const stopFn = getStopFn(getExpectedValue(puzzle, n - 1, c), n - 1, c)
-        rotate(puzzle, steps, n - 2, c, n - 1, getPosition(puzzle, 'X')[1], stopFn)
+        const stopCondition = [getExpectedValue(puzzle, n - 1, c), n - 1, c]
+        rotate(puzzle, steps, n - 2, c, n - 1, getPosition(puzzle, 'X')[1], stopCondition)
     }
 }
 // https://www.instructables.com/How-To-Solve-The-15-Puzzle/
@@ -109,10 +109,10 @@ function compressSteps(steps) {
 
 function moveTile(puzzle, steps, ch, r, c) {
     const n = puzzle.length
-    const doneFn = (xch, xr, xc) => xch === ch && xr === r && xc === c
+    const doneCondition = [ch, r, c]
 
     let [tr, tc] = getPosition(puzzle, ch)
-    let stopFn
+    let stopCondition
     if (r === n - 1) {
         if (tc < c) {
             // last second of first col
@@ -127,16 +127,16 @@ function moveTile(puzzle, steps, ch, r, c) {
                 applySteps(puzzle, steps, ['R'])
 
                 // now the empty slot must in row `r - 1`
-                stopFn = (xch, xr, xc) => xch === ch && xr === r
-                rotate(puzzle, steps, tr, c + 1, r, Math.max(tc, c + 2), stopFn)
+                stopCondition = [ch, r, -1]
+                rotate(puzzle, steps, tr, c + 1, r, Math.max(tc, c + 2), stopCondition)
             }
 
             tc = getPosition(puzzle, ch)[1]
-            rotate(puzzle, steps, r - 1, c, r, Math.max(c + 1, tc), doneFn)
+            rotate(puzzle, steps, r - 1, c, r, Math.max(c + 1, tc), doneCondition)
         }
     } else if (c === n - 1) {
         if (tr === r) {
-            rotate(puzzle, steps, r, tc, r + 1, c, doneFn)
+            rotate(puzzle, steps, r, tc, r + 1, c, doneCondition)
         } else if (tr < r) {
             // second of last col
             rotateUnit(puzzle, steps, 2, true)
@@ -150,33 +150,33 @@ function moveTile(puzzle, steps, ch, r, c) {
                 applySteps(puzzle, steps, ['D'])
 
                 // now the empty slot must in col `c - 1`
-                stopFn = (xch, xr, xc) => xch === ch && xc === c
-                rotate(puzzle, steps, r + 1, tc, Math.max(tr, r + 2), c, stopFn)
+                stopCondition = [ch, -1, c]
+                rotate(puzzle, steps, r + 1, tc, Math.max(tr, r + 2), c, stopCondition)
             }
 
             tr = getPosition(puzzle, ch)[0]
-            rotate(puzzle, steps, r, c - 1, Math.max(r + 1, tr), c, doneFn)
+            rotate(puzzle, steps, r, c - 1, Math.max(r + 1, tr), c, doneCondition)
         }
     } else {
         if (tc < c) {
             // middle of first row
             applySteps(puzzle, steps, ['D'])
 
-            stopFn = (xch, xr, xc) => xch === ch && xc === c + 1
-            rotate(puzzle, steps, r + 1, tc, Math.max(r + 2, tr), c + 1, stopFn)
-            rotate(puzzle, steps, r, c, tr, c + 1, doneFn)
+            stopCondition = [ch, -1, c + 1]
+            rotate(puzzle, steps, r + 1, tc, Math.max(r + 2, tr), c + 1, stopCondition)
+            rotate(puzzle, steps, r, c, tr, c + 1, doneCondition)
         } else if (tr < r) {
             // middle of first col
             applySteps(puzzle, steps, ['R'])
 
-            stopFn = (xch, xr, xc) => xch === ch && xr === r + 1
-            rotate(puzzle, steps, tr, c + 1, r + 1, Math.max(tc, c + 2), stopFn)
+            stopCondition = [ch, r + 1, -1]
+            rotate(puzzle, steps, tr, c + 1, r + 1, Math.max(tc, c + 2), stopCondition)
 
             tc = getPosition(puzzle, ch)[1]
-            rotate(puzzle, steps, r, c, r + 1, tc, doneFn)
+            rotate(puzzle, steps, r, c, r + 1, tc, doneCondition)
         } else {
             // left top
-            rotate(puzzle, steps, r, c, Math.max(tr, r + 1), Math.max(tc, c + 1), doneFn)
+            rotate(puzzle, steps, r, c, Math.max(tr, r + 1), Math.max(tc, c + 1), doneCondition)
         }
     }
 }
@@ -194,12 +194,15 @@ function moveSlot(puzzle, steps, r, c, rowFirst) {
 
 // r1, c1 - left top corner
 // r2, c2 - right bottom corner
-// stopFn(xch, xr, xc) - when to stop, with xch has moved to [xr, xc]
-function rotate(puzzle, steps, r1, c1, r2, c2, stopFn, clockwise = true) {
+// stopCondition - [xch, xr, xc], when to stop, with xch has moved to [xr, xc]
+function rotate(puzzle, steps, r1, c1, r2, c2, stopCondition, clockwise = true) {
     if (r1 >= r2 || c1 >= c2) throw new Error('invalid rotate')
 
     let [r, c] = getPosition(puzzle, 'X')
+    if (r < r1 || r > r2 || c < c1 || c > c2) throw new Error('invalid rotate')
+
     let stop = false
+    const stopFn = getStopFn(...stopCondition)
     while (1) {
         if (!stop && r === r1) {
             while (c < c2) {
@@ -306,7 +309,11 @@ function getExpectedValue(puzzle, r, c) {
     return r * n + c + 1
 }
 function getStopFn(ch, r, c) {
-    return (xch, xr, xc) => xch === ch && xr === r && xc === c
+    return (xch, xr, xc) => {
+        return xch === ch
+            && (r < 0 || xr === r)
+            && (c < 0 || xc === c)
+    }
 }
 
 module.exports = {

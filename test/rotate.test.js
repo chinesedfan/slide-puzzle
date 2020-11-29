@@ -13,7 +13,7 @@ describe('rotate', () => {
     })
     it('when the slot is in the first row', () => {
         const [ch, r, c] = [10, 3, 2]
-        rotate(puzzle, [], 2, 1, 3, 3, getStopFn(ch, r, c))
+        rotate(puzzle, [], 2, 1, 3, 3, [ch, r, c])
         expect(puzzle[r][c]).toBe(ch)
     })
 })
