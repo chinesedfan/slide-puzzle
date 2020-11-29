@@ -80,6 +80,7 @@ describe('moveTile - middle of first row', () => {
         testSingle(puzzle, puzzle[2][1], 0, 1)
     })
     it('from left bottom', () => {
+        testSingle(puzzle, puzzle[1][0], 0, 1)
         testSingle(puzzle, puzzle[2][0], 0, 1)
     })
     it('from right bottom', () => {

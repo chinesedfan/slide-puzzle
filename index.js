@@ -164,6 +164,8 @@ function moveTile(puzzle, steps, ch, r, c) {
 
             stopCondition = [ch, -1, c + 1]
             rotate(puzzle, steps, r + 1, tc, Math.max(r + 2, tr), c + 1, stopCondition)
+
+            tr = getPosition(puzzle, ch)[0]
             rotate(puzzle, steps, r, c, tr, c + 1, doneCondition)
         } else if (tr < r) {
             // middle of first col
