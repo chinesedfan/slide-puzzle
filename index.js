@@ -12,6 +12,7 @@ function solve(puzzle, steps = []) {
 
     solve2x3(puzzle, steps)
 
+    compressSteps(steps)
     return puzzle
 }
 function solveBar(puzzle, steps, r, c, isRow) {
@@ -80,6 +81,30 @@ function solve2x3(puzzle, steps) {
     }
 
     applySteps(puzzle, steps, ['R'])
+}
+
+function compressSteps(steps) {
+    const opposite = {
+        L: 'R',
+        R: 'L',
+        U: 'D',
+        D: 'U',
+    }
+
+    let i = 0
+    while (i < steps.length) {
+        let j = i
+        while (j && steps[j - 1] === opposite[steps[j]]) {
+            j++
+        }
+
+        const dups = j - i
+        if (dups) {
+            steps.splice(i - dups, dups * 2)
+        } else {
+            i++
+        }
+    }
 }
 
 function moveTile(puzzle, steps, ch, r, c) {
