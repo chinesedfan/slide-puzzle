@@ -1,5 +1,4 @@
 // http://www.kopf.com.br/kaplof/how-to-solve-any-slide-puzzle-regardless-of-its-size
-
 function solve(puzzle, steps = []) {
     puzzle = puzzle.map(row => row.slice())
 
@@ -41,7 +40,40 @@ function solveBar(puzzle, steps, r, c, isRow) {
         rotate(puzzle, steps, n - 2, c, n - 1, getPosition(puzzle, 'X')[1], stopFn)
     }
 }
+// https://www.instructables.com/How-To-Solve-The-15-Puzzle/
 function solve2x3(puzzle, steps) {
+    const n = puzzle.length
+    const ch1 = getExpectedValue(puzzle, n - 2, n - 3)
+    const ch4 = getExpectedValue(puzzle, n - 1, n - 3)
+    const ch5 = getExpectedValue(puzzle, n - 1, n - 2)
+    // 4 ? ?
+    // ? x ?
+    moveTile(puzzle, steps, ch4, n - 2, n - 3)
+    moveSlot(puzzle, steps, n - 1, n - 2, true)
+
+    // 4 1 ?
+    // ? x ?
+    const [r1, c1] = getPosition(puzzle, ch1)
+    if (c1 === n - 1) {
+        rotateUnit(puzzle, steps, 3, r1 === n - 2)
+    } else if (c1 === n - 3) {
+        rotateUnit(puzzle, steps, 2, true)
+        rotateUnit(puzzle, steps, 3, true)
+        rotateUnit(puzzle, steps, 2, false)
+        rotateUnit(puzzle, steps, 3, false)
+    }
+
+    // 1 ? ?
+    // 4 x ?
+    rotateUnit(puzzle, steps, 2, true)
+
+    // rotate the right side
+    const [r5, c5] = getPosition(puzzle, ch5)
+    if (r5 === n - 2) {
+        rotateUnit(puzzle, steps, 3, c5 === n - 2)
+    }
+
+    applySteps(puzzle, steps, ['R'])
 }
 
 function moveTile(puzzle, steps, ch, r, c) {
@@ -195,7 +227,6 @@ function rotateUnit(puzzle, steps, xpos, clockwise) {
     for (let i = 0; i < moves.length; i++) {
         newSteps[i] = moves[(start + i * delta) % moves.length]
     }
-    console.log(newSteps)
     applySteps(puzzle, steps, newSteps)
 }
 
