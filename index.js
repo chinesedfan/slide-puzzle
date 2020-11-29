@@ -74,6 +74,9 @@ function solve2x3(puzzle, steps) {
     const [r5, c5] = getPosition(puzzle, ch5)
     if (r5 === n - 2) {
         rotateUnit(puzzle, steps, 3, c5 === n - 2)
+    // } else if () {
+        // not solvable
+        // TODO: swap 2 and 3
     }
 
     applySteps(puzzle, steps, ['R'])
