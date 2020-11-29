@@ -115,7 +115,7 @@ function moveTile(puzzle, steps, ch, r, c) {
     let stopCondition
     if (r === n - 1) {
         if (tc < c) {
-            // last second of first col
+            // second of last row
             rotateUnit(puzzle, steps, 2, false)
             rotateUnit(puzzle, steps, 3, true)
             rotateUnit(puzzle, steps, 2, true)
@@ -192,19 +192,35 @@ function moveSlot(puzzle, steps, r, c, rowFirst) {
     } else {
         applySteps(puzzle, steps, s1.concat(s2))
     }
+
+    if (puzzle[r][c] !== 'X') throw new Error('failed to moveSlot')
 }
 
 // r1, c1 - left top corner
 // r2, c2 - right bottom corner
 // stopCondition - [xch, xr, xc], when to stop, with xch has moved to [xr, xc]
-function rotate(puzzle, steps, r1, c1, r2, c2, stopCondition, clockwise = true) {
+function rotate(...args) {
+    try {
+        innerRotate(...args)
+    } catch (e) {
+        console.log(args.slice(2))
+        console.log(getStr(args[0]))
+        throw e
+    }
+}
+function innerRotate(puzzle, steps, r1, c1, r2, c2, [xch, xr, xc], clockwise = true) {
     if (r1 >= r2 || c1 >= c2) throw new Error('invalid rotate')
+    if ((xr >= 0 && (xr < r1 || xr > r2))
+        || (xc >= 0 && (xc < c1 || xc > c2))) throw new Error('invalid rotate')
 
     let [r, c] = getPosition(puzzle, 'X')
     if (r < r1 || r > r2 || c < c1 || c > c2) throw new Error('invalid rotate')
 
+    const [cr, cc] = getPosition(puzzle, xch)
+    if (cr < r1 || cr > r2 || cc < c1 || cc > c2) throw new Error('invalid rotate')
+
     let stop = false
-    const stopFn = getStopFn(...stopCondition)
+    const stopFn = getStopFn(xch, xr, xc)
     while (1) {
         if (!stop && r === r1) {
             while (c < c2) {
