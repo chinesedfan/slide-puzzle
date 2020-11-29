@@ -11,6 +11,16 @@ function validPuzzle(puzzle) {
 }
 
 let puzzle
+
+// const steps = []
+// puzzle = solve(
+//     // paste the test game board here
+//     []
+//     , steps)
+// console.log(puzzle)
+// console.log(steps.length, steps.join(','))
+// return
+
 describe('solve', () => {
     afterEach(() => {
         puzzle = solve(puzzle)
@@ -18,6 +28,7 @@ describe('solve', () => {
     })
 
     it.skip('4x4', () => {
+        // not solvable
         puzzle = [
             [2, 3, 4, 8],
             [5, 6, 7, 'X'],
