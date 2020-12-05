@@ -9,6 +9,10 @@
   "scripts": {
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinesedfan/slide-puzzle.git"
+  },
   "keywords": [
     "slide",
     "puzzle",
