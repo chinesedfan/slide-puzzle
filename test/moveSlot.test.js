@@ -1,4 +1,4 @@
-const { moveSlot, applySteps, getStr } = require('../index')
+const { moveSlot } = require('../index')
 
 function testSingle(puzzle, r, c) {
     const steps = []

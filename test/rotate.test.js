@@ -1,7 +1,6 @@
-const { rotate, getStopFn } = require('../index')
+const { rotate } = require('../index')
 
 let puzzle
-let stopFn
 describe('rotate', () => {
     beforeEach(() => {
         puzzle = [

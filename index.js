@@ -272,7 +272,6 @@ function innerRotate(puzzle, steps, r1, c1, r2, c2, [xch, xr, xc], clockwise = t
     }
 }
 
-
 function rotateUnit(puzzle, steps, xpos, clockwise) {
     const moves = 'RDLU'
     const delta = clockwise ? 1 : -1
