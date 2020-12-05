@@ -1,10 +1,12 @@
 ## slide-puzzle-solver
 
-> Useful for https://hack.ainfosec.com/
+> Useful tool for https://hack.ainfosec.com/
 
 Solver for [slide puzzle](https://en.wikipedia.org/wiki/Sliding_puzzle).
 
-Note that not every puzzle is *solvable*. But this solver can solve every *solvable* puzzle with different sizes in limited time.
+Note that not every NxN puzzle is *solvable*. But this solver can solve every *solvable* puzzle with different sizes in limited time.
+
+More stable than DFS or A-star algorithm, instead of efficient.
 
 ### Usage
 
