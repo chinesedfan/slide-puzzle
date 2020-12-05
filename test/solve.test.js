@@ -1,4 +1,33 @@
-const { solve, getExpectedValue } = require('../index')
+const { solve, swap, getExpectedValue } = require('../index')
+
+function randomPuzzle(size) {
+    const puzzle = Array(size)
+    for (let i = 0; i < size; i++) {
+        puzzle[i] = []
+        for (let j = 0; j < size; j++) {
+            puzzle[i][j] = getExpectedValue(puzzle, i, j)
+        }
+    }
+
+    let swaps = size * size
+    while (swaps--) {
+        const a = randomN(size * size) - 1
+        const b = randomN(size * size) - 1
+        if (a === b) continue
+
+        swap(
+            puzzle,
+            Math.floor(a / size), a % size,
+            Math.floor(b / size), b % size
+        )
+    }
+    return puzzle
+}
+// https://www.cnblogs.com/starof/p/4988516.html
+// returns 1 to n
+function randomN(n) {
+    return Math.floor(Math.random() * n) + 1
+}
 
 function validPuzzle(puzzle) {
     const n = puzzle.length;
@@ -44,5 +73,8 @@ describe('solve', () => {
             [1, 7, 17, 10, 24],
             [20, 22, 23, 21, 19],
         ]
+    })
+    it.skip('random', () => {
+        puzzle = randomPuzzle(10)
     })
 })

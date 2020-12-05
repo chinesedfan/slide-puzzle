@@ -350,6 +350,7 @@ module.exports = {
     rotate,
 
     applySteps,
+    swap,
 
     getStr,
     getPosition,
