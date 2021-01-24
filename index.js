@@ -1,3 +1,47 @@
+// https://www.codewars.com/kata/5a20eeccee1aae3cbc000090
+function slidePuzzle(puzzle){
+    const [sr, sc] = getPosition(puzzle, 0)
+    puzzle[sr][sc] = 'X'
+
+    const steps = []
+    try {
+        solve(puzzle, steps)
+    } catch (e) {
+        if (e.message === 'not solvable') {
+            return null
+        } else {
+            throw e
+        }
+    }
+
+    return convertSteps2Targets(puzzle, steps)
+}
+function convertSteps2Targets(puzzle, steps) {
+    const targets = []
+
+    let [sr, sc] = getPosition(puzzle, 'X')
+    steps.forEach(s => {
+        const osr = sr
+        const osc = sc
+        switch (s) {
+        case 'R':
+            swap(puzzle, sr, sc, sr, ++sc)
+            break
+        case 'L':
+            swap(puzzle, sr, sc, sr, --sc)
+            break
+        case 'D':
+            swap(puzzle, sr, sc, ++sr, sc)
+            break
+        case 'U':
+            swap(puzzle, sr, sc, --sr, sc)
+            break
+        }
+        targets.push(puzzle[osr][osc])
+    })
+    return targets
+}
+
 // http://www.kopf.com.br/kaplof/how-to-solve-any-slide-puzzle-regardless-of-its-size
 function solve(puzzle, steps = []) {
     puzzle = puzzle.map(row => row.slice())
