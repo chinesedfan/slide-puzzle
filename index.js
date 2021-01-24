@@ -384,22 +384,3 @@ function getStopFn(ch, r, c) {
             && (c < 0 || xc === c)
     }
 }
-
-module.exports = {
-    solve,
-    solveBar,
-    solve2x3,
-
-    moveTile,
-    moveSlot,
-
-    rotate,
-
-    applySteps,
-    swap,
-
-    getStr,
-    getPosition,
-    getExpectedValue,
-    getStopFn,
-}
