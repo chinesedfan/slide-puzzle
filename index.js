@@ -94,7 +94,7 @@ function compressSteps(steps) {
     let i = 0
     while (i < steps.length) {
         let j = i
-        while (j && steps[j - 1] === opposite[steps[j]]) {
+        while (j && steps[i + i - 1 - j] === opposite[steps[j]]) {
             j++
         }
 
@@ -214,7 +214,6 @@ function rotate(...args) {
     }
 }
 function innerRotate(puzzle, steps, r1, c1, r2, c2, [xch, xr, xc], clockwise = true) {
-    if (r1 >= r2 || c1 >= c2) throw new Error('invalid rotate')
     if ((xr >= 0 && (xr < r1 || xr > r2))
         || (xc >= 0 && (xc < c1 || xc > c2))) throw new Error('invalid rotate')
 
