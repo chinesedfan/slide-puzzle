@@ -1,6 +1,6 @@
 {
   "name": "slide-puzzle-solver",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Solver for slide puzzle",
   "main": "index.js",
   "directories": {
