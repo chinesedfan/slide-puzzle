@@ -56,15 +56,6 @@ describe('solve', () => {
         expect(validPuzzle(puzzle)).toBeTruthy()
     })
 
-    it.skip('4x4', () => {
-        // not solvable
-        puzzle = [
-            [2, 3, 4, 8],
-            [5, 6, 7, 'X'],
-            [9, 1, 10, 11],
-            [12, 13, 14, 15],
-        ]
-    })
     it('5x5', () => {
         puzzle = [
             [2, 13, 'X', 5, 15],
@@ -85,5 +76,22 @@ describe('solve', () => {
     })
     it.skip('random', () => {
         puzzle = randomPuzzle(10)
+    })
+})
+
+describe('solve - not solvable', () => {
+    afterEach(() => {
+        expect(() => {
+            puzzle = solve(puzzle)
+        }).toThrow('not solvable')
+    })
+
+    it('4x4', () => {
+        puzzle = [
+            [2, 3, 4, 8],
+            [5, 6, 7, 'X'],
+            [9, 1, 10, 11],
+            [12, 13, 14, 15],
+        ]
     })
 })

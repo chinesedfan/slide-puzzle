@@ -47,6 +47,7 @@ function solveBar(puzzle, steps, r, c, isRow) {
 function solve2x3(puzzle, steps) {
     const n = puzzle.length
     const ch1 = getExpectedValue(puzzle, n - 2, n - 3)
+    const ch2 = getExpectedValue(puzzle, n - 2, n - 2)
     const ch4 = getExpectedValue(puzzle, n - 1, n - 3)
     const ch5 = getExpectedValue(puzzle, n - 1, n - 2)
     // 4 ? ?
@@ -75,9 +76,12 @@ function solve2x3(puzzle, steps) {
     const [r5, c5] = getPosition(puzzle, ch5)
     if (r5 === n - 2) {
         rotateUnit(puzzle, steps, 3, c5 === n - 2)
-    // } else if () {
-        // not solvable
-        // TODO: swap 2 and 3
+    }
+
+    // check bad 2 and 3, but can't swap them
+    const [r2, c2] = getPosition(puzzle, ch2)
+    if (c2 === n - 1) {
+        throw new Error('not solvable')
     }
 
     applySteps(puzzle, steps, ['R'])
